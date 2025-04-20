@@ -11,11 +11,12 @@
 
 .nav-row {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     column-gap: 30px;
     row-gap: 20px;
     flex-wrap: wrap;
+    position: relative;
 }
 
 .logo {
@@ -30,6 +31,10 @@
 }
 
 .nav-list {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
     display: flex;
     flex-wrap: wrap;
     row-gap: 10px;
