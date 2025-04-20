@@ -33,7 +33,7 @@
 .nav-list {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-47%);
 
     display: flex;
     flex-wrap: wrap;
@@ -113,3 +113,5 @@
     position: relative;
     z-index: 9;
 }
+
+

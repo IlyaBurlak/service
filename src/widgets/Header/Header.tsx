@@ -1,6 +1,8 @@
 import { Link, NavLink } from 'react-router-dom';
+import {useState} from "react";
 
 function Header() {
+    const [menuOpen, setMenuOpen] = useState(false);
     return (
         <nav className="nav">
             <div className="container">
@@ -10,11 +12,20 @@ function Header() {
                     </Link>
 
                     <button className="dark-mode-btn">
-                        <img src="/img/icons/sun.svg" alt="Light mode" className="dark-mode-btn__icon" />
-                        <img src="/img/icons/moon.svg" alt="Dark mode" className="dark-mode-btn__icon" />
+                        <img src="/img/icons/sun.svg" alt="Light mode" className="dark-mode-btn__icon"/>
+                        <img src="/img/icons/moon.svg" alt="Dark mode" className="dark-mode-btn__icon"/>
                     </button>
 
-                    <ul className="nav-list">
+                    <button
+                        className="burger-btn"
+                        onClick={() => setMenuOpen(!menuOpen)}
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+
+                    <ul className={`nav-list ${menuOpen ? 'nav-list--active' : ''}`}>
                         <li className="nav-list__item">
                             <NavLink
                                 to="/"
