@@ -1,14 +1,18 @@
 import './Maintenance.css';
+import Header from "../../widgets/Header/Header.tsx";
+import Footer from "../../widgets/Footer/Footer.tsx";
 
 const Maintenance = () => {
     return (
+        <>
+       <Header/>
         <div className="maintenance dark-theme">
             <div className="maintenance-content">
                 <h1>Идут работы!</h1>
                 <p>Мы скоро вернёмся с новым контентом и улучшениями.</p>
 
-                <div className="progress-container">
-                    <div className="progress-bar"></div>
+                <div className="maintenance-progress-container">
+                    <div className="maintenance-progress-bar"></div>
                 </div>
 
                 <div className="social-links">
@@ -30,6 +34,8 @@ const Maintenance = () => {
                 </div>
             </div>
         </div>
+            <Footer/>
+        </>
     );
 };
 
