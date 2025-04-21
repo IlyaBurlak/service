@@ -1,8 +1,12 @@
 import { Link, NavLink } from 'react-router-dom';
-import {useState} from "react";
+import { useState } from 'react';
+import {useTheme} from "../../context/ThemeContext.tsx";
 
 function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const { isDark, toggleTheme } = useTheme();
+
+
     return (
         <nav className="nav">
             <div className="container">
@@ -11,7 +15,10 @@ function Header() {
                         <strong>My</strong> portfolio
                     </Link>
 
-                    <button className="dark-mode-btn">
+                    <button
+                        className={`dark-mode-btn ${isDark ? 'dark-mode-btn--active' : ''}`}
+                        onClick={toggleTheme}
+                    >
                         <img src="/img/icons/sun.svg" alt="Light mode" className="dark-mode-btn__icon"/>
                         <img src="/img/icons/moon.svg" alt="Dark mode" className="dark-mode-btn__icon"/>
                     </button>
