@@ -22,16 +22,6 @@ export const projects: Project[] = [
         difficulty: 'lite'
     },
     {
-        id: 3,
-        title: 'Calculator',
-        coverImage: '/img/projects/03Big.png',
-        tags: ['Vanilla JS', 'HTML', 'CSS'],
-        githubUrl: 'https://github.com/IlyaBurlak/Calculator',
-        deployUrl: 'https://ilyaburlak.github.io/Calculator/',
-        description: 'Classic Calculator',
-        difficulty: 'lite'
-    },
-    {
         id: 4,
         title: 'Animated Portfolio',
         coverImage: '/img/projects/04Big.png',
@@ -49,6 +39,16 @@ export const projects: Project[] = [
         githubUrl: 'https://github.com/IlyaBurlak/JS-Bootsrap',
         deployUrl: 'https://ilyaburlak.github.io/JS-Bootsrap/',
         description: 'Some work with Bootstrap and JS',
+        difficulty: 'lite'
+    },
+    {
+        id: 9,
+        title: 'Altair Posts Platform',
+        coverImage: '/img/projects/09Big.png',
+        tags: ['HTML', 'CSS', 'React'],
+        githubUrl: 'https://github.com/IlyaBurlak/Altair-Posts-Platform',
+        deployUrl: 'https://yard-ochre.vercel.app/',
+        description: 'A platform for managing posts with the ability to view, edit and save changes to local storage.',
         difficulty: 'lite'
     },
     {
