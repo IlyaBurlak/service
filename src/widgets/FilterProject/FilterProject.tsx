@@ -1,14 +1,26 @@
+import {DifficultyFilter} from "../../types/DifficultyFilter.ts";
 
-function FilterProject() {
+interface FilterProjectProps {
+    currentFilter: DifficultyFilter;
+    onFilterChange: (filter: DifficultyFilter) => void;
+}
+
+function FilterProject({ currentFilter, onFilterChange }: FilterProjectProps) {
     return (
         <nav className="filter-menu">
             <div className="menu-items">
-                <button className="menu-item filter all"> All</button>
-                <button className="menu-item filter lite"> Lite</button>
-                <button className="menu-item filter medium"> Medium</button>
-                <button className="menu-item filter hard"> Hard</button>
+                {(['all', 'lite', 'medium', 'hard'] as DifficultyFilter[]).map((filter) => (
+                    <button
+                        key={filter}
+                        className={`menu-item filter ${filter} ${currentFilter === filter ? 'active' : ''}`}
+                        onClick={() => onFilterChange(filter)}
+                    >
+                        {filter.charAt(0).toUpperCase() + filter.slice(1)}
+                    </button>
+                ))}
             </div>
         </nav>
-    )
+    );
 }
+
 export default FilterProject;
