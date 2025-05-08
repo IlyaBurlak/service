@@ -1,15 +1,18 @@
 import { Link } from 'react-router-dom';
 import { projects } from '../../../data/projects';
 import FilterProject from "../FilterProject/FilterProject.tsx";
+import { useProjectFilter } from '../../hooks/useProjectFilter';
 
 function ProjectList() {
+    const { filteredProjects, currentFilter, setFilter } = useProjectFilter(projects);
+
     return (
         <main className="section">
             <div className="container">
                 <h2 className="title-1">Projects</h2>
-                <FilterProject/>
+                <FilterProject currentFilter={currentFilter} onFilterChange={setFilter} />
                 <ul className="projects">
-                    {projects.map(project => (
+                    {filteredProjects.map(project => (
                         <li key={project.id} className="project">
                             <Link to={`/projects/${project.id}`}>
                                 <img
