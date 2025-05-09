@@ -1,7 +1,6 @@
 import '../Auth.css';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 
 const RegisterPage = () => {
     const navigate = useNavigate();
@@ -12,6 +11,7 @@ const RegisterPage = () => {
         password: '',
         confirmPassword: ''
     });
+
     const [errors, setErrors] = useState({
         firstName: '',
         lastName: '',
@@ -19,6 +19,7 @@ const RegisterPage = () => {
         password: '',
         confirmPassword: ''
     });
+
     const [touched, setTouched] = useState({
         firstName: false,
         lastName: false,
@@ -26,7 +27,9 @@ const RegisterPage = () => {
         password: false,
         confirmPassword: false
     });
+
     const [isFormValid, setIsFormValid] = useState(false);
+    const [submitError, setSubmitError] = useState('');
 
     useEffect(() => {
         validateForm();
@@ -41,6 +44,7 @@ const RegisterPage = () => {
             confirmPassword: ''
         };
 
+        // Валидация имени
         if (!formData.firstName.trim()) {
             newErrors.firstName = 'Имя обязательно для заполнения';
         }
@@ -73,17 +77,40 @@ const RegisterPage = () => {
         return isValid;
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
         setTouched(prev => ({ ...prev, [name]: true }));
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (validateForm()) {
+        setSubmitError('');
+
+        if (!validateForm()) return;
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password,
+                    name: formData.firstName,
+                    surname: formData.lastName
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Ошибка регистрации');
+            }
+
             alert('Регистрация успешна!');
             navigate('/');
+        } catch (err) {
+            const error = err instanceof Error ? err : new Error('Неизвестная ошибка');
+            setSubmitError(error.message);
         }
     };
 
@@ -109,8 +136,9 @@ const RegisterPage = () => {
                             onChange={handleChange}
                             onBlur={() => setTouched(prev => ({ ...prev, firstName: true }))}
                         />
-                        {errors.firstName && touched.firstName &&
-                            <span className="error-message">{errors.firstName}</span>}
+                        {errors.firstName && touched.firstName && (
+                            <span className="error-message">{errors.firstName}</span>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -124,8 +152,9 @@ const RegisterPage = () => {
                             onChange={handleChange}
                             onBlur={() => setTouched(prev => ({ ...prev, lastName: true }))}
                         />
-                        {errors.lastName && touched.lastName &&
-                            <span className="error-message">{errors.lastName}</span>}
+                        {errors.lastName && touched.lastName && (
+                            <span className="error-message">{errors.lastName}</span>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -139,8 +168,9 @@ const RegisterPage = () => {
                             onChange={handleChange}
                             onBlur={() => setTouched(prev => ({ ...prev, email: true }))}
                         />
-                        {errors.email && touched.email &&
-                            <span className="error-message">{errors.email}</span>}
+                        {errors.email && touched.email && (
+                            <span className="error-message">{errors.email}</span>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -154,8 +184,9 @@ const RegisterPage = () => {
                             onChange={handleChange}
                             onBlur={() => setTouched(prev => ({ ...prev, password: true }))}
                         />
-                        {errors.password && touched.password &&
-                            <span className="error-message">{errors.password}</span>}
+                        {errors.password && touched.password && (
+                            <span className="error-message">{errors.password}</span>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -169,9 +200,12 @@ const RegisterPage = () => {
                             onChange={handleChange}
                             onBlur={() => setTouched(prev => ({ ...prev, confirmPassword: true }))}
                         />
-                        {errors.confirmPassword && touched.confirmPassword &&
-                            <span className="error-message">{errors.confirmPassword}</span>}
+                        {errors.confirmPassword && touched.confirmPassword && (
+                            <span className="error-message">{errors.confirmPassword}</span>
+                        )}
                     </div>
+
+                    {submitError && <div className="error-message mb-2">{submitError}</div>}
 
                     <button
                         type="submit"
