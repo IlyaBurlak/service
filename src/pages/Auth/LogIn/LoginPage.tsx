@@ -1,0 +1,43 @@
+import '../Auth.css';
+import { Link } from 'react-router-dom';
+
+
+const LoginPage = () => {
+    return (
+        <>
+            <div className="auth-container dark-theme">
+                <div className="auth-card">
+                    <h1>Вход</h1>
+                    <form className="auth-form">
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                className="auth-input"
+                                placeholder="example@mail.com"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="password">Пароль</label>
+                            <input
+                                type="password"
+                                id="password"
+                                className="auth-input"
+                                placeholder="••••••••"
+                            />
+                        </div>
+                        <button type="submit" className="auth-button">
+                            Войти
+                        </button>
+                    </form>
+                    <p className="auth-text">
+                        Нет аккаунта? <Link to="/register" className="auth-link">Зарегистрироваться</Link>
+                    </p>
+                </div>
+            </div>
+        </>
+    );
+};
+
+export default LoginPage;

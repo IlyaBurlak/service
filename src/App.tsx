@@ -6,6 +6,8 @@ import NotFoundPage from "./pages/NotFound/NotFoundPage.tsx";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
 import MaintenancePage from "./pages/Maintenance/MaintenancePage.tsx";
 import ProjectPage from "./pages/ProjectPage/ProjectPage.tsx";
+import RegisterPage from "./pages/Auth/Registration/RegisterPage.tsx";
+import LoginPage from "./pages/Auth/LogIn/LoginPage.tsx";
 
 function App() {
     return (
@@ -18,6 +20,8 @@ function App() {
                     <Route path="/comments" element={<MaintenancePage />} />
                     <Route path="/projects/:id" element={<ProjectPage />} />
                     <Route path="*" element={<NotFoundPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
                 </Routes>
             </Router>
         </ThemeProvider>
