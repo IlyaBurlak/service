@@ -34,31 +34,42 @@ export const useRegister = () => {
 
     const [isFormValid, setIsFormValid] = useState(false);
     const [submitError, setSubmitError] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
 
     useEffect(() => {
         validateForm();
     }, [formData]);
 
     const validateForm = () => {
-        const newErrors = { ...errors };
+        const newErrors = {
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
+        };
         let isValid = true;
 
-        if (!formData.firstName.trim()) {
-            newErrors.firstName = 'Имя обязательно';
+        if (formData.firstName.trim().length < 2) {
+            newErrors.firstName = 'Имя должно содержать минимум 2 символа';
             isValid = false;
         }
-        if (!formData.lastName.trim()) {
-            newErrors.lastName = 'Фамилия обязательна';
+
+        if (formData.lastName.trim().length < 2) {
+            newErrors.lastName = 'Фамилия должна содержать минимум 2 символа';
             isValid = false;
         }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-            newErrors.email = 'Некорректный email';
+
+        if (!formData.email.includes('@') || !formData.email.includes('.')) {
+            newErrors.email = 'Введите корректный email';
             isValid = false;
         }
-        if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(formData.password)) {
-            newErrors.password = 'Недостаточно сложный пароль';
+
+        if (formData.password.length < 6) {
+            newErrors.password = 'Пароль должен содержать минимум 6 символов';
             isValid = false;
         }
+
         if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = 'Пароли не совпадают';
             isValid = false;
@@ -96,14 +107,15 @@ export const useRegister = () => {
                 surname: formData.lastName,
             });
 
-            const data: RegisterResponse = response.data; // Явное указание типа
+            const data: RegisterResponse = response.data;
             localStorage.setItem('access_token', data.access_token);
             localStorage.setItem('userInfo', JSON.stringify({
                 name: formData.firstName,
                 surname: formData.lastName
             }));
 
-            navigate('/home');
+            setIsSuccess(true);
+            setTimeout(() => navigate('/home'), 2000);
         } catch (err) {
             setSubmitError(err instanceof Error ? err.message : 'Ошибка регистрации');
         }
@@ -120,6 +132,7 @@ export const useRegister = () => {
         touched,
         isFormValid,
         submitError,
+        isSuccess,
         handleBlur,
         handleChange,
         handleSubmit,

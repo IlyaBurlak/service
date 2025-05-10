@@ -1,6 +1,8 @@
+import React, { useEffect, useState } from 'react';
 import '../Auth.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRegister } from "../../../hooks/useRegister.tsx";
+import confetti, {Options} from 'canvas-confetti';
 
 const RegisterPage = () => {
     const {
@@ -9,17 +11,61 @@ const RegisterPage = () => {
         touched,
         isFormValid,
         submitError,
+        isSuccess,
         handleChange,
-        handleBlur,
         handleSubmit,
         handleGuestRegistration
     } = useRegister();
+
+    const [triggered, setTriggered] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isSuccess && !triggered) {
+            setTriggered(true);
+
+            const count = 200;
+            const defaults = {
+                origin: { y: 0.8 }
+            };
+
+            const fire = (particleRatio: number, opts: Options) => {
+                confetti({
+                    ...defaults,
+                    ...opts,
+                    particleCount: Math.floor(count * particleRatio)
+                });
+            };
+
+
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.7 }
+            });
+
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
+
+            setTimeout(() => {
+                navigate("/");
+            }, 2000);
+        }
+    }, [isSuccess, triggered, navigate]);
+
+    const handleSuccess = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        await handleSubmit(e);
+    };
 
     return (
         <div className="auth-container dark-theme">
             <div className="auth-card">
                 <h1>Регистрация</h1>
-                <form className="auth-form" onSubmit={handleSubmit}>
+                <form className="auth-form" onSubmit={handleSuccess}>
                     <div className="form-group">
                         <label htmlFor="firstName">Имя</label>
                         <input
@@ -30,7 +76,6 @@ const RegisterPage = () => {
                             placeholder="Иван"
                             value={formData.firstName}
                             onChange={handleChange}
-                            onBlur={() => handleBlur('firstName')}
                         />
                         {errors.firstName && touched.firstName && (
                             <span className="error-message">{errors.firstName}</span>
@@ -47,7 +92,6 @@ const RegisterPage = () => {
                             placeholder="Иванов"
                             value={formData.lastName}
                             onChange={handleChange}
-                            onBlur={() => handleBlur('lastName')}
                         />
                         {errors.lastName && touched.lastName && (
                             <span className="error-message">{errors.lastName}</span>
@@ -64,7 +108,6 @@ const RegisterPage = () => {
                             placeholder="example@mail.com"
                             value={formData.email}
                             onChange={handleChange}
-                            onBlur={() => handleBlur('email')}
                         />
                         {errors.email && touched.email && (
                             <span className="error-message">{errors.email}</span>
@@ -81,7 +124,6 @@ const RegisterPage = () => {
                             placeholder="••••••••"
                             value={formData.password}
                             onChange={handleChange}
-                            onBlur={() => handleBlur('password')}
                         />
                         {errors.password && touched.password && (
                             <span className="error-message">{errors.password}</span>
@@ -98,7 +140,6 @@ const RegisterPage = () => {
                             placeholder="••••••••"
                             value={formData.confirmPassword}
                             onChange={handleChange}
-                            onBlur={() => handleBlur('confirmPassword')}
                         />
                         {errors.confirmPassword && touched.confirmPassword && (
                             <span className="error-message">{errors.confirmPassword}</span>
