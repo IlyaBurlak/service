@@ -121,10 +121,27 @@ export const useRegister = () => {
         }
     };
 
-    const handleGuestRegistration = () => {
-        localStorage.setItem('guestUser', 'true');
-        navigate('/home');
+    const handleGuestRegistration = async () => {
+        try {
+            setSubmitError('');
+
+            const response = await api.post('/auth/register/guest', {});
+
+            const data = response.data;
+
+            localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('userInfo', JSON.stringify({
+                name: data.name,
+                surname: data.surname
+            }));
+
+            setIsSuccess(true);
+            setTimeout(() => navigate('/home'), 2000);
+        } catch (err) {
+            setSubmitError(err instanceof Error ? err.message : 'Ошибка гостевой регистрации');
+        }
     };
+
 
     return {
         formData,
