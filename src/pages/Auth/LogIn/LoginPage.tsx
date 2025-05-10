@@ -1,35 +1,18 @@
 import '../Auth.css';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {useLogin} from "../../../hooks/useLogin.tsx";
+
 
 const LoginPage = () => {
-    const navigate = useNavigate();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const {
+        email,
+        password,
+        error,
+        setEmail,
+        setPassword,
+        handleSubmit
+    } = useLogin();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Ошибка авторизации');
-            }
-
-            const { access_token } = await response.json();
-            localStorage.setItem('access_token', access_token);
-            navigate('/');
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Неверный email или пароль';
-            setError(errorMessage);
-        }
-    };
 
     return (
         <div className="auth-container dark-theme">

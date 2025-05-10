@@ -1,124 +1,19 @@
 import '../Auth.css';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { Link } from 'react-router-dom';
+import { useRegister } from "../../../hooks/useRegister.tsx";
 
 const RegisterPage = () => {
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    });
-
-    const [errors, setErrors] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    });
-
-    const [touched, setTouched] = useState({
-        firstName: false,
-        lastName: false,
-        email: false,
-        password: false,
-        confirmPassword: false
-    });
-
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [submitError, setSubmitError] = useState('');
-
-    useEffect(() => {
-        validateForm();
-    }, [formData]);
-
-    const validateForm = () => {
-        const newErrors = {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            confirmPassword: ''
-        };
-
-        // Валидация имени
-        if (!formData.firstName.trim()) {
-            newErrors.firstName = 'Имя обязательно для заполнения';
-        }
-
-        if (!formData.lastName.trim()) {
-            newErrors.lastName = 'Фамилия обязательна для заполнения';
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!formData.email) {
-            newErrors.email = 'Email обязателен';
-        } else if (!emailRegex.test(formData.email)) {
-            newErrors.email = 'Некорректный формат email';
-        }
-
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-        if (!formData.password) {
-            newErrors.password = 'Пароль обязателен';
-        } else if (!passwordRegex.test(formData.password)) {
-            newErrors.password = 'Минимум 8 символов, 1 заглавная и 1 цифра';
-        }
-
-        if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = 'Пароли не совпадают';
-        }
-
-        setErrors(newErrors);
-        const isValid = Object.values(newErrors).every(error => error === '');
-        setIsFormValid(isValid);
-        return isValid;
-    };
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-        setTouched(prev => ({ ...prev, [name]: true }));
-    };
-
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setSubmitError('');
-
-        if (!validateForm()) return;
-
-        try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: formData.email,
-                    password: formData.password,
-                    name: formData.firstName,
-                    surname: formData.lastName
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Ошибка регистрации');
-            }
-
-            alert('Регистрация успешна!');
-            navigate('/');
-        } catch (err) {
-            const error = err instanceof Error ? err : new Error('Неизвестная ошибка');
-            setSubmitError(error.message);
-        }
-    };
-
-    const handleGuestRegistration = () => {
-        localStorage.setItem('guestUser', 'true');
-        navigate('/');
-        alert('Добро пожаловать как гость! Ваши данные будут временными.');
-    };
+    const {
+        formData,
+        errors,
+        touched,
+        isFormValid,
+        submitError,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        handleGuestRegistration
+    } = useRegister();
 
     return (
         <div className="auth-container dark-theme">
@@ -133,8 +28,9 @@ const RegisterPage = () => {
                             name="firstName"
                             className={`auth-input ${errors.firstName && touched.firstName ? 'error' : ''}`}
                             placeholder="Иван"
+                            value={formData.firstName}
                             onChange={handleChange}
-                            onBlur={() => setTouched(prev => ({ ...prev, firstName: true }))}
+                            onBlur={() => handleBlur('firstName')}
                         />
                         {errors.firstName && touched.firstName && (
                             <span className="error-message">{errors.firstName}</span>
@@ -149,8 +45,9 @@ const RegisterPage = () => {
                             name="lastName"
                             className={`auth-input ${errors.lastName && touched.lastName ? 'error' : ''}`}
                             placeholder="Иванов"
+                            value={formData.lastName}
                             onChange={handleChange}
-                            onBlur={() => setTouched(prev => ({ ...prev, lastName: true }))}
+                            onBlur={() => handleBlur('lastName')}
                         />
                         {errors.lastName && touched.lastName && (
                             <span className="error-message">{errors.lastName}</span>
@@ -165,8 +62,9 @@ const RegisterPage = () => {
                             name="email"
                             className={`auth-input ${errors.email && touched.email ? 'error' : ''}`}
                             placeholder="example@mail.com"
+                            value={formData.email}
                             onChange={handleChange}
-                            onBlur={() => setTouched(prev => ({ ...prev, email: true }))}
+                            onBlur={() => handleBlur('email')}
                         />
                         {errors.email && touched.email && (
                             <span className="error-message">{errors.email}</span>
@@ -181,8 +79,9 @@ const RegisterPage = () => {
                             name="password"
                             className={`auth-input ${errors.password && touched.password ? 'error' : ''}`}
                             placeholder="••••••••"
+                            value={formData.password}
                             onChange={handleChange}
-                            onBlur={() => setTouched(prev => ({ ...prev, password: true }))}
+                            onBlur={() => handleBlur('password')}
                         />
                         {errors.password && touched.password && (
                             <span className="error-message">{errors.password}</span>
@@ -197,8 +96,9 @@ const RegisterPage = () => {
                             name="confirmPassword"
                             className={`auth-input ${errors.confirmPassword && touched.confirmPassword ? 'error' : ''}`}
                             placeholder="••••••••"
+                            value={formData.confirmPassword}
                             onChange={handleChange}
-                            onBlur={() => setTouched(prev => ({ ...prev, confirmPassword: true }))}
+                            onBlur={() => handleBlur('confirmPassword')}
                         />
                         {errors.confirmPassword && touched.confirmPassword && (
                             <span className="error-message">{errors.confirmPassword}</span>

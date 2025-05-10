@@ -1,0 +1,28 @@
+/* ProfilePanel.css */
+.profile-drawer .ant-drawer-content {
+    background: var(--page-bg) !important;
+}
+
+.profile-drawer .ant-drawer-header {
+    background: var(--dark-bg) !important;
+}
+
+.profile-drawer .ant-drawer-title {
+    color: var(--header-text) !important;
+}
+
+.profile-drawer .ant-drawer-close {
+    color: var(--header-text) !important;
+}
+
+.profile-content {
+    padding: 16px;
+}
+
+.profile-content .ant-descriptions-bordered .ant-descriptions-item-label {
+    background: var(--project-card-bg) !important;
+}
+
+.profile-content .ant-descriptions-bordered .ant-descriptions-item-content {
+    background: var(--project-card-bg) !important;
+}
