@@ -4,7 +4,6 @@ import { api } from "../services/api.ts";
 
 interface RegisterResponse {
     access_token: string;
-    // добавьте другие поля на случай, если они есть
 }
 
 export const useRegister = () => {

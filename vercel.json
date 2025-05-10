@@ -1,0 +1,15 @@
+{
+  "rewrites": [
+    {
+      "source": "/auth/:path*",
+      "destination": "https://service-backend-2eub.onrender.com"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/index.html",
+      "locale": {
+        "redirect": false
+      }
+    }
+  ]
+}
