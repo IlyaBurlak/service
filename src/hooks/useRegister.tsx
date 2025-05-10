@@ -1,6 +1,11 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {api} from "../services/api.ts";
+import { api } from "../services/api.ts";
+
+interface RegisterResponse {
+    access_token: string;
+    // добавьте другие поля на случай, если они есть
+}
 
 export const useRegister = () => {
     const navigate = useNavigate();
@@ -78,7 +83,6 @@ export const useRegister = () => {
         }));
     };
 
-
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSubmitError('');
@@ -93,7 +97,8 @@ export const useRegister = () => {
                 surname: formData.lastName,
             });
 
-            localStorage.setItem('access_token', response.access_token);
+            const data: RegisterResponse = response.data; // Явное указание типа
+            localStorage.setItem('access_token', data.access_token);
             localStorage.setItem('userInfo', JSON.stringify({
                 name: formData.firstName,
                 surname: formData.lastName
