@@ -130,6 +130,7 @@ export const useRegister = () => {
             const data = response.data;
 
             localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('guestUser', 'true');
             localStorage.setItem('userInfo', JSON.stringify({
                 name: data.name,
                 surname: data.surname
