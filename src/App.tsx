@@ -15,25 +15,19 @@ function App() {
         <ThemeProvider>
             <Router>
                 <Routes>
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/skills" element={<SkillsPage />} />
+                    <Route path="/contacts" element={<ContactPage />} />
+                    <Route path="/projects/:id" element={<ProjectPage />} />
+
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
 
                     <Route element={<ProtectedRoute />}>
-                        <Route path="/home" element={<HomePage />} />
-                        <Route path="/skills" element={<SkillsPage />} />
-                        <Route path="/contacts" element={<ContactPage />} />
                         <Route path="/comments" element={<MaintenancePage />} />
-                        <Route path="/projects/:id" element={<ProjectPage />} />
                     </Route>
 
-                    <Route
-                        path="/"
-                        element={
-                            localStorage.getItem('access_token') || localStorage.getItem('guestUser')
-                                ? <Navigate to="/home" replace />
-                                : <Navigate to="/login" replace />
-                        }
-                    />
+                    <Route path="/" element={<Navigate to="/home" replace />} />
 
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
