@@ -1,6 +1,6 @@
 function PrevInfo() {
     const handleDownloadCV = () => {
-        const cvUrl = 'public/CV.pdf';
+        const cvUrl = '/CV.pdf';
 
         const link = document.createElement('a');
         link.href = cvUrl;
